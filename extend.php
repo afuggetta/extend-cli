@@ -35,6 +35,16 @@ class Extend {
 			$id = isset( $args[0] ) ? $args[0] : $assoc_args['id'];
 		}
 
+		if ( 'latest' == $id ) {
+			$latest_post = wp_get_recent_posts( [ 'numberposts' => 1, 'order' => 'DESC' ] );
+			if ( $latest_post && is_array( $latest_post ) ) {
+				//Get first post id
+				$id = $latest_post[0]['ID']; 
+			} else {
+				WP_CLI::error( 'Error while retrieving the post title' );
+			}
+		}
+
 		if ( $title = get_the_title($id) ) {
 			WP_CLI::success( 'The post title is: ' . sanitize_text_field( $title ));
 		} else {
